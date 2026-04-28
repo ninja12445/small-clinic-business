@@ -10,7 +10,7 @@ Here are the steps we need to do :
 ## 6. Open and run nvm-setup.exe, click continue
 ## 7. Select destination location (choose place you want to save it locally)
 ## 8. Press 
-```window R. Type "cmd", hit enter``
+``` window R. Type "cmd", press enter ```
 ## 9. checks if nvm installed or not (Type: nvm --version to verify)
 ## 10. (Example:  24.15.0, youcan use LTS, or latest depends on your preference) 
 ``` nvm install version ```
