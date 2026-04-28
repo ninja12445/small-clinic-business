@@ -1,0 +1,11 @@
+## Product brochure outline:
+- Basic descriptive information about my software product 
+- Demo link
+- Name
+- Project title
+- Project webpage URL (GitHub)
+- Key features & brief descriptions
+- System requirements
+- Block diagram of the system
+- Add some screen snapshots
+- Makes it like a marketing brochure (detail as possible)
