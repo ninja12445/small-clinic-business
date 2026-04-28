@@ -17,7 +17,7 @@ Here are the steps we need to do :
 nvm install version
 ```
 11. It will show 
-
+```
 Downloading node.js version 24.15.0 (64-bit)...
 Extracting node and npm...
 Complete
