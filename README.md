@@ -30,7 +30,7 @@
 \[❌\] Error management (frontend & backend)  
 
 ## Collaboration and Code Integration
-\[❌\] Use of Git (branches, merges, PRs)  
+\[✅\] Use of Git (branches, merges, PRs)  
 
 ## Performance Optimization
 \[❌\] Efficient algorithms  
