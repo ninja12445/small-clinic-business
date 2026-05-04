@@ -1,0 +1,7 @@
+Patient { id: UUID, user_id: UUID, first_name: str, last_name: str, date_of_birth: date, gender: str, contact_number: str, email: str, address: str, medical_history: JSONB, created_at: datetime, updated_at: datetime }
+Doctor { id: UUID, user_id: UUID, first_name: str, last_name: str, specialty: str, license_number: str, contact_number: str, email: str, clinic_id: UUID, created_at: datetime, updated_at: datetime }
+Appointment { id: UUID, patient_id: UUID, doctor_id: UUID, clinic_id: UUID, start_time: datetime, end_time: datetime, status: str (scheduled, completed, cancelled), notes: str, created_at: datetime, updated_at: datetime }
+Clinic { id: UUID, name: str, address: str, contact_number: str, email: str, created_at: datetime, updated_at: datetime }
+User { id: UUID, username: str, password_hash: str, email: str, role: str (admin, doctor, receptionist, patient), created_at: datetime, updated_at: datetime }
+MedicalRecord { id: UUID, patient_id: UUID, doctor_id: UUID, appointment_id: UUID, diagnosis: str, treatment: str, prescription: JSONB, notes: str, created_at: datetime, updated_at: datetime }
+Billing { id: UUID, patient_id: UUID, appointment_id: UUID, amount: float, status: str (pending, paid, cancelled), created_at: datetime, updated_at: datetime }

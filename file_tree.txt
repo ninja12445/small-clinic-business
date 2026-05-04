@@ -1,0 +1,116 @@
+clinic_saas/
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   ├── v1/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── endpoints/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── auth.py
+│   │   │   │   │   ├── users.py
+│   │   │   │   │   ├── patients.py
+│   │   │   │   │   ├── doctors.py
+│   │   │   │   │   ├── appointments.py
+│   │   │   │   │   ├── clinics.py
+│   │   │   │   │   ├── medical_records.py
+│   │   │   │   │   └── billing.py
+│   │   ├── core/
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py
+│   │   │   ├── security.py
+│   │   │   └── errors.py
+│   │   ├── crud/
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   ├── patient.py
+│   │   │   ├── doctor.py
+│   │   │   ├── appointment.py
+│   │   │   ├── clinic.py
+│   │   │   ├── medical_record.py
+│   │   │   ├── billing.py
+│   │   │   └── user.py
+│   │   ├── db/
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   ├── session.py
+│   │   │   └── models.py
+│   │   ├── schemas/
+│   │   │   ├── __init__.py
+│   │   │   ├── user.py
+│   │   │   ├── patient.py
+│   │   │   ├── doctor.py
+│   │   │   ├── appointment.py
+│   │   │   ├── clinic.py
+│   │   │   ├── medical_record.py
+│   │   │   └── billing.py
+│   │   └── services/
+│   │       ├── __init__.py
+│   │       ├── auth_service.py
+│   │       ├── patient_service.py
+│   │       ├── doctor_service.py
+│   │       ├── appointment_service.py
+│   │       ├── clinic_service.py
+│   │       ├── medical_record_service.py
+│   │       └── billing_service.py
+│   ├── data_collection/
+│   │   ├── __init__.py
+│   │   ├── collectors.py
+│   │   └── exporter.py
+│   ├── tests/
+│   │   ├── __init__.py
+│   │   ├── unit/
+│   │   │   ├── __init__.py
+│   │   │   ├── test_auth_service.py
+│   │   │   ├── test_patient_service.py
+│   │   │   └── ...
+│   │   └── integration/
+│   │       ├── __init__.py
+│   │       └── test_flows.py
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── README.md
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── App.js
+│   │   ├── index.js
+│   │   ├── components/
+│   │   │   ├── Auth/
+│   │   │   │   ├── LoginForm.js
+│   │   │   │   └── RegisterForm.js
+│   │   │   ├── Common/
+│   │   │   │   ├── Header.js
+│   │   │   │   └── Footer.js
+│   │   │   ├── Patient/
+│   │   │   │   ├── PatientList.js
+│   │   │   │   └── PatientDetail.js
+│   │   │   ├── Doctor/
+│   │   │   │   ├── DoctorList.js
+│   │   │   │   └── DoctorDetail.js
+│   │   │   ├── Appointment/
+│   │   │   │   ├── AppointmentCalendar.js
+│   │   │   │   └── AppointmentForm.js
+│   │   │   └── ...
+│   │   ├── pages/
+│   │   │   ├── HomePage.js
+│   │   │   ├── LoginPage.js
+│   │   │   ├── DashboardPage.js
+│   │   │   ├── PatientsPage.js
+│   │   │   ├── DoctorsPage.js
+│   │   │   ├── AppointmentsPage.js
+│   │   │   └── ...
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   └── styles/
+│   │       └── index.css
+│   ├── package.json
+│   └── README.md
+├── db/
+│   ├── init.sql
+│   └── migrations/
+│       └── V1__initial_schema.sql
+└── README.md

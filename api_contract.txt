@@ -1,0 +1,38 @@
+POST /users/register → UserRegistrationRequest { username, email, password, role } → UserResponse { id, username, email, role }
+POST /users/login → UserLoginRequest { username, password } → AuthTokenResponse { access_token, token_type }
+
+# Patient Management
+POST /patients → PatientCreateRequest { user_id, first_name, last_name, date_of_birth, gender, contact_number, email, address, medical_history } → PatientResponse { id, first_name, last_name, ... }
+GET /patients/{patient_id} → None → PatientResponse { id, first_name, last_name, ... }
+PUT /patients/{patient_id} → PatientUpdateRequest { first_name, last_name, ... } → PatientResponse { id, first_name, last_name, ... }
+GET /patients → None → List[PatientResponse]
+
+# Doctor Management
+POST /doctors → DoctorCreateRequest { user_id, first_name, last_name, specialty, license_number, contact_number, email, clinic_id } → DoctorResponse { id, first_name, last_name, ... }
+GET /doctors/{doctor_id} → None → DoctorResponse { id, first_name, last_name, ... }
+PUT /doctors/{doctor_id} → DoctorUpdateRequest { first_name, last_name, ... } → DoctorResponse { id, first_name, last_name, ... }
+GET /doctors → None → List[DoctorResponse]
+
+# Appointment Management
+POST /appointments → AppointmentCreateRequest { patient_id, doctor_id, clinic_id, start_time, end_time, notes } → AppointmentResponse { id, patient_id, doctor_id, ... }
+GET /appointments/{appointment_id} → None → AppointmentResponse { id, patient_id, doctor_id, ... }
+PUT /appointments/{appointment_id} → AppointmentUpdateRequest { start_time, end_time, status, notes } → AppointmentResponse { id, patient_id, doctor_id, ... }
+GET /appointments/patient/{patient_id} → None → List[AppointmentResponse]
+GET /appointments/doctor/{doctor_id} → None → List[AppointmentResponse]
+
+# Clinic Management
+POST /clinics → ClinicCreateRequest { name, address, contact_number, email } → ClinicResponse { id, name, ... }
+GET /clinics/{clinic_id} → None → ClinicResponse { id, name, ... }
+PUT /clinics/{clinic_id} → ClinicUpdateRequest { name, address, ... } → ClinicResponse { id, name, ... }
+GET /clinics → None → List[ClinicResponse]
+
+# Medical Record Management
+POST /medical_records → MedicalRecordCreateRequest { patient_id, doctor_id, appointment_id, diagnosis, treatment, prescription, notes } → MedicalRecordResponse { id, patient_id, ... }
+GET /medical_records/{record_id} → None → MedicalRecordResponse { id, patient_id, ... }
+GET /medical_records/patient/{patient_id} → None → List[MedicalRecordResponse]
+
+# Billing Management
+POST /billing → BillingCreateRequest { patient_id, appointment_id, amount, status } → BillingResponse { id, patient_id, ... }
+GET /billing/{billing_id} → None → BillingResponse { id, patient_id, ... }
+PUT /billing/{billing_id} → BillingUpdateRequest { amount, status } → BillingResponse { id, patient_id, ... }
+GET /billing/patient/{patient_id} → None → List[BillingResponse}

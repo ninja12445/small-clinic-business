@@ -1,0 +1,67 @@
+# 8. CORE FLOWS
+
+## Workflow Diagrams
+User Registration → Patient Profile Creation → Appointment Scheduling → Doctor Consultation → Medical Record Update → Billing Generation → Payment Processing
+Receptionist Login → View Doctor Schedule → Create Appointment → Notify Patient
+Doctor Login → View Appointments → View Patient History → Conduct Consultation → Create Medical Record → Update Appointment Status
+
+# 9. UNIT TESTING (STRICT STRUCTURE)
+
+## Unit Test Design
+def test_create_appointment_success():
+    # Setup: mock DB, valid input
+    # Action: call create_appointment
+    # Assert: AppointmentCreated returned, DB record exists
+
+def test_create_appointment_conflict():
+    # Setup: mock DB with existing appointment
+    # Action: call create_appointment with overlapping time
+    # Assert: ErrorConflict returned
+
+def test_create_appointment_invalid_doctor():
+    # Setup: mock DB, non-existent doctor_id
+    # Action: call create_appointment
+    # Assert: ErrorNotFound returned
+
+def test_create_appointment_past_time():
+    # Setup: mock DB, past start_time
+    # Action: call create_appointment
+    # Assert: ErrorInvalidInput returned
+
+# 10. INTEGRATION TESTING (FLOW TESTS)
+
+## Integration Test Flows
+Flow A: create_patient → create_appointment → doctor_view_schedule
+Flow B: create_appointment → conflict_detected → retry → success
+Flow C: invalid patient → appointment rejected → error logged
+
+# 11. DATA COLLECTION MODULE
+
+## Data Collection Structure
+/data_collection/
+    collectors.py
+    exporter.py
+
+## Collectors Implementation (Pseudocode)
+class DataCollector:
+    def log_request(endpoint, input, output, status):
+        # Capture API request logs
+        pass
+
+    def log_error(error_type, message, stack_trace):
+        # Capture error logs
+        pass
+
+    def log_metric(metric_name, value):
+        # Capture latency metrics
+        pass
+
+    def log_state_change(entity, old_state, new_state):
+        # Capture state changes
+        pass
+
+## Exporter Implementation (Pseudocode)
+class DataExporter:
+    def export_dataset(format="json"):
+        # Export captured data as dataset
+        pass

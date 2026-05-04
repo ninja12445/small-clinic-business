@@ -1,0 +1,139 @@
+# 6. FRONTEND (React)
+
+## Pages
+HomePage.js
+LoginPage.js
+RegisterPage.js
+DashboardPage.js
+PatientsPage.js
+DoctorsPage.js
+AppointmentsPage.js
+MedicalRecordsPage.js
+BillingPage.js
+ClinicsPage.js
+
+## Components
+
+# Auth Components
+LoginForm.js
+RegisterForm.js
+
+# Common Components
+Header.js
+Footer.js
+Sidebar.js
+ProtectedRoute.js
+
+# Patient Components
+PatientList.js
+PatientDetail.js
+PatientForm.js
+PatientCard.js
+
+# Doctor Components
+DoctorList.js
+DoctorDetail.js
+DoctorForm.js
+DoctorCard.js
+
+# Appointment Components
+AppointmentCalendar.js
+AppointmentForm.js
+AppointmentList.js
+AppointmentCard.js
+
+# Medical Record Components
+MedicalRecordList.js
+MedicalRecordDetail.js
+MedicalRecordForm.js
+
+# Billing Components
+BillingList.js
+BillingDetail.js
+BillingForm.js
+
+## Minimal Component Skeletons
+
+// LoginForm.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+
+export default function LoginForm() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await api.post('/users/login', { username, password });
+            localStorage.setItem('token', response.data.access_token);
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Login failed', error);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+            <button type="submit">Login</button>
+        </form>
+    );
+}
+
+// AppointmentForm.js
+import React, { useState } from 'react';
+import api from '../services/api';
+
+export default function AppointmentForm({ patientId, onSuccess }) {
+    const [doctorId, setDoctorId] = useState('');
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [notes, setNotes] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await api.post('/appointments', {
+                patient_id: patientId,
+                doctor_id: doctorId,
+                start_time: startTime,
+                end_time: endTime,
+                notes
+            });
+            onSuccess();
+        } catch (error) {
+            console.error('Appointment creation failed', error);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <input value={doctorId} onChange={(e) => setDoctorId(e.target.value)} placeholder="Doctor ID" />
+            <input type="datetime-local" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+            <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Notes" />
+            <button type="submit">Create Appointment</button>
+        </form>
+    );
+}
+
+// services/api.js
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000'
+});
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+export default api;
