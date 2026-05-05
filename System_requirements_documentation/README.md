@@ -1,0 +1,10 @@
+-	System Architecture and System Design
+-	System Implementation Planning 
+- Algorithms and Data Model Implementation      
+- User Interface Design and Implementation
+- Design of tests & Software testing
+- Error Handling
+- Collaboration and Code Integration
+- Debugging & Logging
+- Performance Optimization Plan
+- Maintenance and Support Strategy 
