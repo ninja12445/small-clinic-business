@@ -134,9 +134,9 @@ Keeps UI behavior synchronized with backend reality.
 
 ---
 
-## 4. Scheduling System (Cross-Cutting Feature)
+## 4. Scheduling System 
 
-Scheduling spans multiple layers:
+Scheduling combines multiple layers:
 
 - **Data Model:** Defines time blocks and constraints
 - **Logic Layer:** Prevents conflicts and invalid bookings
