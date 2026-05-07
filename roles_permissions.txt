@@ -1,3 +1,4 @@
+RBAC
 Admin → manage_users, manage_doctors, manage_clinics, view_all_records, manage_billing
 Doctor → view_patient_records, create_medical_record, update_medical_record, view_appointments, manage_own_schedule
 Receptionist → manage_appointments, manage_patients, view_doctors_schedule, manage_billing
