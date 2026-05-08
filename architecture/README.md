@@ -306,3 +306,44 @@ Production deployment and user documentation.
 | Responsive UI | Multi-device | Medium |
 | Animations | UX polish | Medium |
 | Error Handling | Friendly messages | Medium |
+
+## 10. Architecture + Security design 
+```
+
+Browser
+  ↓ (HTTP-only cookie: session)
+FastAPI (Python)  ← TRUST AUTHORITY
+  ├─ verify JWT
+  ├─ read payload (openId, name, role)
+  ├─ sync user to MariaDB
+  └─ return User
+MariaDB
+```
+
+## 11. File stack 
+What Python handles 
+- FastAPI
+- PyJWT
+- Raw SQL
+- HTTP cookies
+
+What Typescript handles
+- API client
+- Frontend UI
+- Types
+
+## 12. Security and Database authority 
+- Signs JWTs (SignJWT)
+- Verifies JWTs (jwtVerify)
+- Reads HTTP cookies
+- Uses secret keys
+- Throws auth errors (ForbiddenError)
+- Reads users from DB
+- Creates users
+- Updates last login
+- Assigns roles
+
+
+
+
+
