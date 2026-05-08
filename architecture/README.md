@@ -1,92 +1,92 @@
 ## 1. Database Schema
 
-### Architecture Table Design
+### Core Tables
 
 #### users
-Bảng lưu trữ thông tin người dùng hệ thống với hỗ trợ 4 vai trò khác nhau.
+Table storing system user information with support for four different roles.
 
 | Field | Type | Description |
-|-------|------|-------------|
-| id | INT (PK) | Khóa chính, tự động tăng |
-| openId | VARCHAR(64) | Manus OAuth identifier, duy nhất |
-| email | VARCHAR(320) | Email người dùng, duy nhất |
-| name | TEXT | Tên đầy đủ |
-| password_hash | VARCHAR(255) | Hash mật khẩu (bcrypt) |
-| role | ENUM('admin', 'doctor', 'nurse', 'patient') | Vai trò người dùng |
-| specialization | VARCHAR(100) | Chuyên khoa (chỉ cho Doctor) |
-| department | VARCHAR(100) | Phòng ban (chỉ cho Nurse) |
-| phone | VARCHAR(20) | Số điện thoại |
-| is_active | BOOLEAN | Trạng thái hoạt động |
-| createdAt | TIMESTAMP | Thời gian tạo |
-| updatedAt | TIMESTAMP | Thời gian cập nhật |
-| lastSignedIn | TIMESTAMP | Lần đăng nhập cuối |
+|------|------|-------------|
+| id | INT (PK) | Primary key, auto-increment |
+| openId | VARCHAR(64) | Manus OAuth identifier, unique |
+| email | VARCHAR(320) | User email, unique |
+| name | TEXT | Full name |
+| password_hash | VARCHAR(255) | Password hash (bcrypt) |
+| role | ENUM('admin', 'doctor', 'nurse', 'patient') | User role |
+| specialization | VARCHAR(100) | Medical specialization (Doctor only) |
+| department | VARCHAR(100) | Department (Nurse only) |
+| phone | VARCHAR(20) | Phone number |
+| is_active | BOOLEAN | Active status |
+| createdAt | TIMESTAMP | Creation time |
+| updatedAt | TIMESTAMP | Last update time |
+| lastSignedIn | TIMESTAMP | Last login time |
 
 #### appointments
-Bảng lưu trữ lịch hẹn khám bệnh.
+Table storing medical appointment schedules.
 
 | Field | Type | Description |
-|-------|------|-------------|
+|------|------|-------------|
 | id | VARCHAR(36) (PK) | UUID |
-| patient_id | INT (FK) | Tham chiếu đến users |
-| doctor_id | INT (FK) | Tham chiếu đến users |
-| title | VARCHAR(255) | Tiêu đề cuộc hẹn |
-| description | TEXT | Mô tả chi tiết |
-| start_time | TIMESTAMP | Thời gian bắt đầu |
-| end_time | TIMESTAMP | Thời gian kết thúc |
-| status | ENUM('scheduled', 'completed', 'cancelled', 'no_show') | Trạng thái |
-| notes | TEXT | Ghi chú |
-| createdAt | TIMESTAMP | Thời gian tạo |
-| updatedAt | TIMESTAMP | Thời gian cập nhật |
+| patient_id | INT (FK) | Reference to users |
+| doctor_id | INT (FK) | Reference to users |
+| title | VARCHAR(255) | Appointment title |
+| description | TEXT | Detailed description |
+| start_time | TIMESTAMP | Start time |
+| end_time | TIMESTAMP | End time |
+| status | ENUM('scheduled', 'completed', 'cancelled', 'no_show') | Status |
+| notes | TEXT | Notes |
+| createdAt | TIMESTAMP | Creation time |
+| updatedAt | TIMESTAMP | Last update time |
 
 #### audit_logs
-Bảng ghi lại tất cả các hành động quan trọng trong hệ thống.
+Table recording all important system actions.
 
 | Field | Type | Description |
-|-------|------|-------------|
+|------|------|-------------|
 | id | VARCHAR(36) (PK) | UUID |
-| user_id | INT (FK) | Người thực hiện hành động |
-| action | VARCHAR(100) | Loại hành động (LOGIN, CREATE_USER, UPDATE_APPOINTMENT, etc.) |
-| entity_type | VARCHAR(50) | Loại entity bị ảnh hưởng (USER, APPOINTMENT, etc.) |
-| entity_id | VARCHAR(36) | ID của entity |
-| old_values | JSON | Giá trị cũ (nếu có) |
-| new_values | JSON | Giá trị mới (nếu có) |
-| ip_address | VARCHAR(45) | Địa chỉ IP |
+| user_id | INT (FK) | User performing the action |
+| action | VARCHAR(100) | Action type (LOGIN, CREATE_USER, UPDATE_APPOINTMENT, etc.) |
+| entity_type | VARCHAR(50) | Affected entity type (USER, APPOINTMENT, etc.) |
+| entity_id | VARCHAR(36) | Entity ID |
+| old_values | JSON | Old values (if any) |
+| new_values | JSON | New values (if any) |
+| ip_address | VARCHAR(45) | IP address |
 | user_agent | TEXT | User agent |
-| timestamp | TIMESTAMP | Thời gian hành động |
+| timestamp | TIMESTAMP | Action time |
 
 #### chat_rooms
-Bảng lưu trữ các phòng chat.
+Table storing chat rooms.
 
 | Field | Type | Description |
-|-------|------|-------------|
+|------|------|-------------|
 | id | VARCHAR(36) (PK) | UUID |
-| name | VARCHAR(255) | Tên phòng chat |
-| type | ENUM('direct', 'group') | Loại phòng (1-1 hoặc nhóm) |
-| created_by | INT (FK) | Người tạo phòng |
-| createdAt | TIMESTAMP | Thời gian tạo |
-| updatedAt | TIMESTAMP | Thời gian cập nhật |
+| name | VARCHAR(255) | Chat room name |
+| type | ENUM('direct', 'group') | Room type (1-1 or group) |
+| created_by | INT (FK) | Room creator |
+| createdAt | TIMESTAMP | Creation time |
+| updatedAt | TIMESTAMP | Last update time |
 
 #### chat_room_members
-Bảng lưu trữ thành viên của mỗi phòng chat.
+Table storing members of each chat room.
 
 | Field | Type | Description |
-|-------|------|-------------|
+|------|------|-------------|
 | id | VARCHAR(36) (PK) | UUID |
-| room_id | VARCHAR(36) (FK) | Tham chiếu đến chat_rooms |
-| user_id | INT (FK) | Tham chiếu đến users |
-| joined_at | TIMESTAMP | Thời gian tham gia |
+| room_id | VARCHAR(36) (FK) | Reference to chat_rooms |
+| user_id | INT (FK) | Reference to users |
+| joined_at | TIMESTAMP | Join time |
 
 #### chat_messages
-Bảng lưu trữ tin nhắn trong các phòng chat.
+Table storing messages in chat rooms.
 
 | Field | Type | Description |
-|-------|------|-------------|
+|------|------|-------------|
 | id | VARCHAR(36) (PK) | UUID |
-| room_id | VARCHAR(36) (FK) | Tham chiếu đến chat_rooms |
-| user_id | INT (FK) | Người gửi tin nhắn |
-| content | TEXT | Nội dung tin nhắn |
-| is_read | BOOLEAN | Trạng thái đã đọc |
-| createdAt | TIMESTAMP | Thời gian gửi |
+| room_id | VARCHAR(36) (FK) | Reference to chat_rooms |
+| user_id | INT (FK) | Message sender |
+| content | TEXT | Message content |
+| is_read | BOOLEAN | Read status |
+| createdAt | TIMESTAMP | Sent time |
 
 ---
 
@@ -94,73 +94,73 @@ Bảng lưu trữ tin nhắn trong các phòng chat.
 
 ### Authentication Flow
 
-1. **Register**: Người dùng cung cấp email, mật khẩu, tên và vai trò (hoặc Admin gán vai trò)
-2. **Login**: Xác thực email/mật khẩu, trả về JWT token
-3. **JWT Token**: Chứa `userId`, `email`, `role`, `exp` (hết hạn sau 24 giờ)
-4. **Refresh Token**: Tùy chọn, cho phép làm mới JWT mà không cần đăng nhập lại
+1. **Register**: User provides email, password, name, and role (or role assigned by Admin)
+2. **Login**: Authenticate email/password and return JWT token
+3. **JWT Token**: Contains `userId`, `email`, `role`, `exp` (expires after 24 hours)
+4. **Refresh Token** (optional): Allows refreshing JWT without re-login
 
 ### Role-Based Access Control (RBAC)
 
-Bốn vai trò với quyền hạn khác nhau:
+Four roles with different permissions:
 
-| Vai trò | Quyền hạn |
-|---------|----------|
-| **Admin** | Quản lý người dùng, xem audit log, quản lý tất cả lịch hẹn, xem chat toàn hệ thống |
-| **Doctor** | Xem danh sách bệnh nhân, quản lý lịch hẹn riêng, chat với bệnh nhân/y tá, xem bệnh sử |
-| **Nurse** | Hỗ trợ Doctor, xem danh sách bệnh nhân, chat với Doctor/bệnh nhân, ghi chú lịch hẹn |
-| **Patient** | Xem lịch hẹn riêng, đặt/hủy lịch hẹn, chat với Doctor/Nurse, xem kết quả khám |
+| Role | Permissions |
+|-----|-------------|
+| **Admin** | Manage users, view audit logs, manage all appointments, view system-wide chats |
+| **Doctor** | View patient list, manage own appointments, chat with patients/nurses, view medical history |
+| **Nurse** | Assist doctors, view patient list, chat with doctors/patients, add appointment notes |
+| **Patient** | View own appointments, book/cancel appointments, chat with doctors/nurses, view results |
 
 ### Middleware
 
-- `authMiddleware`: Xác thực JWT token, trích xuất user info
-- `roleMiddleware`: Kiểm tra quyền hạn dựa trên vai trò
-- `auditMiddleware`: Ghi lại hành động vào audit_logs
+- `authMiddleware`: Validate JWT token and extract user info
+- `roleMiddleware`: Enforce role-based permissions
+- `auditMiddleware`: Record actions into audit_logs
 
 ---
 
 ## 3. API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Đăng ký tài khoản mới
-- `POST /api/auth/login` - Đăng nhập
-- `POST /api/auth/logout` - Đăng xuất
-- `POST /api/auth/refresh` - Làm mới JWT token
-- `GET /api/auth/me` - Lấy thông tin người dùng hiện tại
+- `POST /api/auth/register` – Register new account
+- `POST /api/auth/login` – Login
+- `POST /api/auth/logout` – Logout
+- `POST /api/auth/refresh` – Refresh JWT token
+- `GET /api/auth/me` – Get current user info
 
 ### User Management (Admin only)
-- `GET /api/users` - Danh sách tất cả người dùng
-- `POST /api/users` - Tạo người dùng mới
-- `GET /api/users/:id` - Chi tiết người dùng
-- `PUT /api/users/:id` - Cập nhật người dùng
-- `DELETE /api/users/:id` - Xóa người dùng
-- `PUT /api/users/:id/role` - Thay đổi vai trò người dùng
+- `GET /api/users` – List all users
+- `POST /api/users` – Create new user
+- `GET /api/users/:id` – User details
+- `PUT /api/users/:id` – Update user
+- `DELETE /api/users/:id` – Delete user
+- `PUT /api/users/:id/role` – Change user role
 
 ### Appointments
-- `GET /api/appointments` - Danh sách lịch hẹn (lọc theo vai trò)
-- `POST /api/appointments` - Tạo lịch hẹn mới
-- `GET /api/appointments/:id` - Chi tiết lịch hẹn
-- `PUT /api/appointments/:id` - Cập nhật lịch hẹn
-- `DELETE /api/appointments/:id` - Hủy lịch hẹn
-- `GET /api/appointments/doctor/:doctorId` - Danh sách lịch hẹn của bác sĩ
-- `GET /api/appointments/patient/:patientId` - Danh sách lịch hẹn của bệnh nhân
-- `POST /api/appointments/:id/check-conflict` - Kiểm tra xung đột lịch
+- `GET /api/appointments` – List appointments (role-based)
+- `POST /api/appointments` – Create appointment
+- `GET /api/appointments/:id` – Appointment details
+- `PUT /api/appointments/:id` – Update appointment
+- `DELETE /api/appointments/:id` – Cancel appointment
+- `GET /api/appointments/doctor/:doctorId` – Doctor’s appointments
+- `GET /api/appointments/patient/:patientId` – Patient’s appointments
+- `POST /api/appointments/:id/check-conflict` – Check schedule conflicts
 
 ### Audit Logs (Admin only)
-- `GET /api/audit-logs` - Danh sách audit logs
-- `GET /api/audit-logs/:id` - Chi tiết audit log
-- `GET /api/audit-logs/user/:userId` - Audit logs của người dùng cụ thể
+- `GET /api/audit-logs` – List audit logs
+- `GET /api/audit-logs/:id` – Audit log details
+- `GET /api/audit-logs/user/:userId` – Logs for a specific user
 
 ### Chat
-- `GET /api/chat/rooms` - Danh sách phòng chat của người dùng
-- `POST /api/chat/rooms` - Tạo phòng chat mới
-- `GET /api/chat/rooms/:roomId/messages` - Danh sách tin nhắn trong phòng
-- `POST /api/chat/rooms/:roomId/messages` - Gửi tin nhắn mới
-- `PUT /api/chat/messages/:messageId/read` - Đánh dấu tin nhắn đã đọc
+- `GET /api/chat/rooms` – User chat rooms
+- `POST /api/chat/rooms` – Create chat room
+- `GET /api/chat/rooms/:roomId/messages` – Room message history
+- `POST /api/chat/rooms/:roomId/messages` – Send message
+- `PUT /api/chat/messages/:messageId/read` – Mark message as read
 
 ### Dashboard
-- `GET /api/dashboard/stats` - Thống kê tổng quan (theo vai trò)
-- `GET /api/dashboard/today-appointments` - Lịch hẹn hôm nay
-- `GET /api/dashboard/unread-messages` - Số tin nhắn chưa đọc
+- `GET /api/dashboard/stats` – Overview statistics (role-based)
+- `GET /api/dashboard/today-appointments` – Today’s appointments
+- `GET /api/dashboard/unread-messages` – Unread message count
 
 ---
 
@@ -168,28 +168,28 @@ Bốn vai trò với quyền hạn khác nhau:
 
 ### Chat Events
 
-**Client → Server:**
-- `join_room`: Tham gia phòng chat
-- `send_message`: Gửi tin nhắn
-- `mark_as_read`: Đánh dấu tin nhắn đã đọc
-- `leave_room`: Rời khỏi phòng chat
-- `typing`: Hiển thị trạng thái "đang gõ"
+**Client → Server**
+- `join_room`
+- `send_message`
+- `mark_as_read`
+- `leave_room`
+- `typing`
 
-**Server → Client:**
-- `message_received`: Tin nhắn mới được nhận
-- `user_joined`: Người dùng tham gia phòng
-- `user_left`: Người dùng rời khỏi phòng
-- `user_typing`: Người dùng đang gõ
-- `message_read`: Tin nhắn được đọc
-- `error`: Lỗi xảy ra
+**Server → Client**
+- `message_received`
+- `user_joined`
+- `user_left`
+- `user_typing`
+- `message_read`
+- `error`
 
 ### Notification Events
 
-**Server → Client:**
-- `appointment_created`: Lịch hẹn mới được tạo
-- `appointment_updated`: Lịch hẹn được cập nhật
-- `appointment_cancelled`: Lịch hẹn bị hủy
-- `new_message`: Tin nhắn mới từ phòng chat
+**Server → Client**
+- `appointment_created`
+- `appointment_updated`
+- `appointment_cancelled`
+- `new_message`
 
 ---
 
@@ -198,174 +198,111 @@ Bốn vai trò với quyền hạn khác nhau:
 ### Pages & Components
 
 #### Shared
-- `Layout`: Sidebar navigation, header, footer
-- `ProtectedRoute`: Kiểm tra authentication và authorization
-- `RoleGuard`: Kiểm tra vai trò người dùng
+- `Layout`
+- `ProtectedRoute`
+- `RoleGuard`
 
 #### Authentication
-- `LoginPage`: Đăng nhập
-- `RegisterPage`: Đăng ký
-- `ForgotPasswordPage`: Quên mật khẩu (tùy chọn)
+- `LoginPage`
+- `RegisterPage`
+- `ForgotPasswordPage`
 
 #### Dashboard
-- `DashboardPage`: Trang chính với thống kê theo vai trò
-- `AdminDashboard`: Thống kê cho Admin
-- `DoctorDashboard`: Thống kê cho Doctor
-- `NurseDashboard`: Thống kê cho Nurse
-- `PatientDashboard`: Thống kê cho Patient
+- `DashboardPage`
+- `AdminDashboard`
+- `DoctorDashboard`
+- `NurseDashboard`
+- `PatientDashboard`
 
 #### User Management (Admin)
-- `UserManagementPage`: Danh sách người dùng
-- `CreateUserModal`: Tạo người dùng mới
-- `EditUserModal`: Chỉnh sửa người dùng
-- `UserDetailPage`: Chi tiết người dùng
+- `UserManagementPage`
+- `CreateUserModal`
+- `EditUserModal`
+- `UserDetailPage`
 
 #### Appointments
-- `AppointmentsPage`: Danh sách lịch hẹn
-- `CalendarView`: Xem lịch theo tuần/tháng
-- `AppointmentDetailModal`: Chi tiết lịch hẹn
-- `CreateAppointmentModal`: Tạo lịch hẹn mới
-- `ConflictWarning`: Cảnh báo xung đột lịch
+- `AppointmentsPage`
+- `CalendarView`
+- `AppointmentDetailModal`
+- `CreateAppointmentModal`
+- `ConflictWarning`
 
 #### Chat
-- `ChatPage`: Giao diện chat chính
-- `ChatRoomList`: Danh sách phòng chat
-- `ChatWindow`: Cửa sổ chat
-- `MessageInput`: Ô nhập tin nhắn
-- `MessageList`: Danh sách tin nhắn
+- `ChatPage`
+- `ChatRoomList`
+- `ChatWindow`
+- `MessageInput`
+- `MessageList`
 
 #### Audit Logs (Admin)
-- `AuditLogsPage`: Danh sách audit logs
-- `AuditLogDetailModal`: Chi tiết audit log
-- `AuditLogFilter`: Lọc audit logs
+- `AuditLogsPage`
+- `AuditLogDetailModal`
+- `AuditLogFilter`
 
 ---
 
 ## 6. Security Considerations
 
-1. **Password Hashing**: Sử dụng bcrypt với salt rounds = 12
-2. **JWT Secret**: Lưu trữ an toàn trong environment variables
-3. **HTTPS Only**: Tất cả API calls phải qua HTTPS
-4. **CORS**: Cấu hình CORS để chỉ cho phép origin được phép
-5. **Rate Limiting**: Giới hạn số lần đăng nhập thất bại
-6. **SQL Injection Prevention**: Sử dụng parameterized queries
-7. **XSS Prevention**: Sanitize user input, escape output
-8. **CSRF Protection**: Sử dụng CSRF tokens cho state-changing operations
-9. **Audit Logging**: Ghi lại tất cả hành động quan trọng
-10. **Role-Based Access**: Kiểm tra quyền hạn ở server-side
+1. Password hashing with bcrypt (salt rounds = 12)
+2. JWT secrets stored in environment variables
+3. HTTPS enforced
+4. CORS restricted
+5. Rate limiting for login attempts
+6. SQL injection prevention
+7. XSS prevention
+8. CSRF protection
+9. Audit logging enabled
+10. Server-side role enforcement
 
 ---
 
 ## 7. Technology Stack
 
 | Layer | Technology |
-|-------|-----------|
-| **Frontend** | React 19, TypeScript, Tailwind CSS, shadcn/ui |
-| **Backend** | Express.js, tRPC, Node.js |
-| **Database** | MySQL/TiDB, Drizzle ORM |
-| **Real-time** | Socket.IO (WebSocket) |
-| **Authentication** | JWT, bcrypt |
-| **Testing** | Vitest |
-| **Deployment** | Manus Cloud |
+|-----|------------|
+| Frontend | React 19, TypeScript, Tailwind CSS, shadcn/ui |
+| Backend | Express.js, tRPC, Node.js |
+| Database | MySQL / TiDB, Drizzle ORM |
+| Real-time | Socket.IO |
+| Authentication | JWT, bcrypt |
+| Testing | Vitest |
+| Deployment | Manus Cloud |
 
 ---
 
-## 8. Data Flow Diagram
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Frontend (React)                         │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │ Pages: Dashboard, Appointments, Chat, Users, Audit Logs │   │
-│  │ Components: Sidebar, Cards, Forms, Modals, Calendar     │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└──────────────────────┬──────────────────────────────────────────┘
-                       │
-        ┌──────────────┼──────────────┐
-        │              │              │
-        ▼              ▼              ▼
-    tRPC API      WebSocket      Static Assets
-   (REST-like)     (Socket.IO)    (Images, CSS)
-        │              │              │
-        └──────────────┼──────────────┘
-                       │
-        ┌──────────────▼──────────────┐
-        │   Backend (Express.js)      │
-        │  ┌────────────────────────┐ │
-        │  │ tRPC Router            │ │
-        │  │ - Auth Procedures      │ │
-        │  │ - User Procedures      │ │
-        │  │ - Appointment Procs    │ │
-        │  │ - Chat Procedures      │ │
-        │  │ - Audit Log Procs      │ │
-        │  └────────────────────────┘ │
-        │  ┌────────────────────────┐ │
-        │  │ Socket.IO Server       │ │
-        │  │ - Chat Events          │ │
-        │  │ - Notifications        │ │
-        │  └────────────────────────┘ │
-        │  ┌────────────────────────┐ │
-        │  │ Middleware             │ │
-        │  │ - Auth Middleware      │ │
-        │  │ - Role Middleware      │ │
-        │  │ - Audit Middleware     │ │
-        │  └────────────────────────┘ │
-        └──────────────┬───────────────┘
-                       │
-        ┌──────────────▼──────────────┐
-        │  Database (MySQL/TiDB)      │
-        │  ┌────────────────────────┐ │
-        │  │ Tables:                │ │
-        │  │ - users                │ │
-        │  │ - appointments         │ │
-        │  │ - audit_logs           │ │
-        │  │ - chat_rooms           │ │
-        │  │ - chat_messages        │ │
-        │  └────────────────────────┘ │
-        └────────────────────────────┘
-```
-
----
-
-## 9. Implementation Phases
+## 8. Implementation Phases
 
 ### Phase 1: Architecture & Design (Current)
-Complete the design documentation, define the database schema, API endpoints, and WebSocket events.
+Complete design documentation, database schema, API endpoints, and WebSocket events.
 
 ### Phase 2: Backend Implementation
-Implement the database schema, authentication, RBAC (Role-Based Access Control), audit logging, and appointment management.
+Implement schema, authentication, RBAC, audit logging, and appointments.
 
 ### Phase 3: WebSocket Chat
-Implement the Socket.IO server, chat room management, real-time messaging, and message history.
+Implement real-time chat, rooms, and message history.
 
 ### Phase 4: Frontend Implementation
-Redesign the user interface, build pages and components, and integrate them with the backend.
+Build UI components and integrate backend.
 
 ### Phase 5: Testing & Integration
-Test the entire system, handle bugs, and optimize performance.
+System testing, bug fixes, performance optimization.
 
 ### Phase 6: Deployment
-Create checkpoints, deploy to production, and prepare user documentation.
+Production deployment and user documentation.
 
 ---
 
-## 10. Key Features Summary
+## 9. Key Features Summary
 
 | Feature | Scope | Priority |
-|---------|-------|----------|
-| User Authentication | Register, Login, Logout, JWT | High |
-| RBAC (4 roles) | Admin, Doctor, Nurse, Patient | High |
-| User Management | Create, Read, Update, Delete, Role Assignment | High |
-| Audit Logging | Log all important actions | High |
-| Appointments | Create, Read, Update, Delete, Conflict Detection | High |
-| WebSocket Chat | Real-time messaging, Room Management, History | High |
-| Dashboard | Role-specific statistics, Today's appointments | High |
-| Responsive Design | Mobile, Tablet, Desktop | Medium |
-| Animations | Smooth transitions, Loading states | Medium |
-| Error Handling | User-friendly error messages | Medium |
-
-
-
-trực tiếp
-
-Nhảy đến trực tiếp
+|------|------|----------|
+| Authentication | JWT-based auth | High |
+| RBAC | 4 roles | High |
+| User Management | CRUD | High |
+| Audit Logging | Full tracking | High |
+| Appointments | Scheduling & conflicts | High |
+| Chat | Real-time messaging | High |
+| Dashboard | Role-based stats | High |
+| Responsive UI | Multi-device | Medium |
+| Animations | UX polish | Medium |
+| Error Handling | Friendly messages | Medium |
